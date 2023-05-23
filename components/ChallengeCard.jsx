@@ -12,6 +12,24 @@ export default function ChallengeCard({style}){
     "failure" : {background: "red", color: "white"},
     "success" : {background: "#00800087", color: "#fbce03de"}
   }
+
+  const displaySubmissionMessage = () => {
+    switch(challengeStatus){
+      case "success":
+        return (
+          `Correct!  The exact PDP was ${challenge.pdp}`
+        )
+        break;
+      case "failure":
+        return (
+          `Too bad!  The exact PDP was ${challenge.pdp}`
+        )
+        break;
+      default:
+        null;
+      break;
+    }
+  }
   
   const handleSubmit = () => {
     if (Math.abs(submissionValue - challenge.pdp) < 10){
@@ -21,24 +39,26 @@ export default function ChallengeCard({style}){
       console.log(`Your submission was not accurate enough.\n  The exact PDP was ${challenge.pdp}.`)
       setChallengeStatus("failure")
     }
-      setSubmissionValue("")
     setTimeout(() => {
+      setSubmissionValue("")
       setChallenge(new Challenge())
       setChallengeStatus("pending")
     }, 3000);
   }
 
   return (
-      <Container sx={style}>
-        <Card raised sx={[{...statusStyles[challengeStatus]},{display: "flex", flexFlow: "column", gap: "1rem", padding: "1rem"}]}>
-          <Typography variant="h3">Challenge:</Typography>
-          <TextField disabled variant="outlined" label="Hose Diameter" value={challenge.hoseType.type}/>
-          <TextField disabled variant="outlined" label="Length" value={challenge.hoseLength}/>
-          <TextField disabled variant="outlined" label="Volume" value={`${challenge.volume} GPM`} />
-          <TextField disabled variant="outlined" label="Nozzle" value={challenge.nozzle.name} />
-          <TextField variant="outlined" type="number" label="Discharge Presure" placeholder="Enter the correct Pump Discharge Pressure"  value={submissionValue} onChange={(e)=>{setSubmissionValue(e.target.value)}} />
-          <Button color="primary" variant="contained" size="medium" sx={{width: "15%", alignSelf: "end"}} onClick={handleSubmit}>Submit</Button>
-        </Card>
-      </Container>
+      <>
+        <Container sx={style}>
+          <Card raised sx={[{...statusStyles[challengeStatus]},{display: "flex", flexFlow: "column", gap: "1rem", padding: "1rem"}]}>
+            <Typography variant="h3">Challenge: {displaySubmissionMessage()} </Typography>
+            <TextField disabled variant="outlined" label="Hose Diameter" value={challenge.hoseType.type}/>
+            <TextField disabled variant="outlined" label="Length" value={challenge.hoseLength}/>
+            <TextField disabled variant="outlined" label="Volume" value={`${challenge.volume} GPM`} />
+            <TextField disabled variant="outlined" label="Nozzle" value={challenge.nozzle.name} />
+            <TextField variant="outlined" type="number" label="Discharge Presure" placeholder="Enter the correct Pump Discharge Pressure"  value={submissionValue} onChange={(e)=>{setSubmissionValue(e.target.value)}} />
+            <Button color="primary" variant="contained" size="medium" sx={{width: "15%", alignSelf: "end"}} onClick={handleSubmit}>Submit</Button>
+          </Card>
+        </Container>
+      </>
   )
 }
