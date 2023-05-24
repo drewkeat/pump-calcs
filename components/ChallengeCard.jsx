@@ -39,11 +39,12 @@ export default function ChallengeCard({style}){
       console.log(`Your submission was not accurate enough.\n  The exact PDP was ${challenge.pdp}.`)
       setChallengeStatus("failure")
     }
-    setTimeout(() => {
-      setSubmissionValue("")
-      setChallenge(new Challenge())
-      setChallengeStatus("pending")
-    }, 3000);
+  }
+  
+  const restartChallenge =()=>{
+    setSubmissionValue("")
+    setChallenge(new Challenge())
+    setChallengeStatus("pending")
   }
 
   return (
@@ -56,7 +57,10 @@ export default function ChallengeCard({style}){
             <TextField disabled variant="outlined" label="Volume" value={`${challenge.volume} GPM`} />
             <TextField disabled variant="outlined" label="Nozzle" value={challenge.nozzle.name} />
             <TextField variant="outlined" type="number" label="Discharge Presure" placeholder="Enter the correct Pump Discharge Pressure"  value={submissionValue} onChange={(e)=>{setSubmissionValue(e.target.value)}} />
+            <Container no-gutters sx={{display: "flex", justifyContent: "end", gap: "1rem"}}>
+              {challengeStatus !== "pending" && <Button color="success" variant="contained" size="medium" sx={{width: "fit-content", alignSelf: "end"}} onClick={restartChallenge}>New Challenge</Button>}
             <Button color="primary" variant="contained" size="medium" sx={{width: "15%", alignSelf: "end"}} onClick={handleSubmit}>Submit</Button>
+            </Container>
           </Card>
         </Container>
       </>
